@@ -1,0 +1,54 @@
+{
+  openapi: '3.0.0',
+  info: { title: 'Aux Todo API', version: '1.0.0' },
+  servers: [{ url: 'http://localhost:3000' }],
+  paths: {
+    '/tasks': {
+      get: {
+        summary: 'List all tasks',
+        responses: { 200: { description: 'List of tasks' } },
+      },
+      post: {
+        summary: 'Create a task',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: { title: { type: 'string' }, description: { type: 'string' } },
+                required: ['title'],
+              },
+            },
+          },
+        },
+        responses: { 200: { description: 'Created task' } },
+      },
+    },
+    '/tasks/{id}': {
+      patch: {
+        summary: 'Update a task',
+        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string' },
+                  description: { type: 'string' },
+                  status: { type: 'string', enum: ['todo', 'in_progress', 'done'] },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: 'Updated task' } },
+      },
+      delete: {
+        summary: 'Delete a task',
+        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        responses: { 200: { description: 'Task deleted' } },
+      },
+    },
+  },
+};
