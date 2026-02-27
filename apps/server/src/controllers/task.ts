@@ -3,7 +3,7 @@ import { PrismaClient, Prisma } from '../../generated/prisma/client.js';
 import dotenv from 'dotenv';
 import type { Request, Response } from 'express';
 import type { Task } from '../../generated/prisma/client.js';
-import type { Server as SocketIoServer } from 'socket.io';
+import type { SessionWithUser } from '../types/server.js';
 dotenv.config();
 
 const pool = new PrismaPg({ connectionString: process.env.DB_URL });
@@ -30,7 +30,10 @@ export const createTask = async (req: Request, res: Response) => {
     });
     res.json(task);
     const io = getIo(req);
-    if (io) io.emit('task:created', task);
+    if (io) {
+        const session = req.session as SessionWithUser;
+        io.emit('task:created', { task, username: session?.user?.username ?? 'Someone' });
+    }
 }
 
 export const updateTask = async (req: Request, res: Response) => {
@@ -45,7 +48,10 @@ export const updateTask = async (req: Request, res: Response) => {
     });
     res.json(task);
     const io = getIo(req);
-    if (io) io.emit('task:updated', task);
+    if (io) {
+        const session = req.session as SessionWithUser;
+        io.emit('task:updated', { task, username: session?.user?.username ?? 'Someone' });
+    }
 }
 
 export const deleteTask = async (req: Request, res: Response) => {
@@ -57,5 +63,8 @@ export const deleteTask = async (req: Request, res: Response) => {
     const task = await prisma.task.delete({ where: { id } });
     res.json(task);
     const io = getIo(req);
-    if (io) io.emit('task:deleted', { id: task.id });
+    if (io) {
+        const session = req.session as SessionWithUser;
+        io.emit('task:deleted', { id: task.id, username: session?.user?.username ?? 'Someone' });
+    }
 }

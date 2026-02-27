@@ -26,7 +26,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AppContent />
-        <Toaster position="top-center" />
+        <Toaster theme="dark" position="top-center" />
       </AuthProvider>
     </QueryClientProvider>
   );

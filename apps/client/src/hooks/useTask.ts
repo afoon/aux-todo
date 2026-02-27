@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import type { Task } from "../types";
 import { z } from "zod";
 import * as tasksApi from "../api/tasks";
-import { useSocket } from "../contexts";
+import { useSocket, useAuth } from "../contexts";
 
 const taskSchema = z.object({
   id: z.string(),
@@ -21,6 +21,8 @@ const TASKS_QUERY_KEY = ["tasks"];
 export const useTask = () => {
   const queryClient = useQueryClient();
   const { socket } = useSocket();
+  const { user } = useAuth();
+  const currentUsername = user?.username ?? null;
 
   const {
     data: tasks = [],
@@ -34,17 +36,23 @@ export const useTask = () => {
   useEffect(() => {
     if (!socket) return;
 
-    const onTaskCreated = () => {
+    const onTaskCreated = (payload: { task: Task; username?: string }) => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
-      toast.info("Task created");
+      if (payload.username !== currentUsername) {
+        toast.info(`${payload.username ?? "Someone"} created a task"`);
+      }
     };
-    const onTaskUpdated = () => {
+    const onTaskUpdated = (payload: { task: Task; username?: string }) => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
-      toast.info("Task updated");
+      if (payload.username !== currentUsername) {
+        toast.info(`${payload.username ?? "Someone"} updated a task"`);
+      }
     };
-    const onTaskDeleted = () => {
+    const onTaskDeleted = (payload: { id: string; username?: string }) => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
-      toast.info("Task deleted");
+      if (payload.username !== currentUsername) {
+        toast.info(`${payload.username ?? "Someone"} deleted a task"`);
+      }
     };
 
     socket.on("task:created", onTaskCreated);
@@ -56,11 +64,14 @@ export const useTask = () => {
       socket.off("task:updated", onTaskUpdated);
       socket.off("task:deleted", onTaskDeleted);
     };
-  }, [socket, queryClient]);
+  }, [socket, queryClient, currentUsername]);
 
   const createMutation = useMutation({
     mutationFn: (payload: tasksApi.CreateTaskPayload) => tasksApi.createTask(payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
+      toast.info("Task created");
+    },
   });
 
   const updateMutation = useMutation({
@@ -68,6 +79,7 @@ export const useTask = () => {
       tasksApi.updateTask(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
+      toast.info("Task updated");
     },
   });
 
@@ -75,6 +87,7 @@ export const useTask = () => {
     mutationFn: (id: string) => tasksApi.deleteTask(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
+      toast.info("Task deleted");
     },
   });
 
@@ -93,8 +106,7 @@ export const useTask = () => {
   }
 
   function deleteTask(task: Task) {
-    const validated = taskSchema.parse(task);
-    deleteMutation.mutate(validated.id);
+    deleteMutation.mutate(task.id);
   }
 
 
@@ -108,8 +120,5 @@ export const useTask = () => {
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,
-    createError: createMutation.error,
-    updateError: updateMutation.error,
-    deleteError: deleteMutation.error,
   };
 };
