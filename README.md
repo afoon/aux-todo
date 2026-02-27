@@ -1,15 +1,35 @@
 # aux-todo
 
+
+## Pre-requisites
+- Node.js v24.x+
+- npm or [pnpm](https://pnpm.io/installation) package manager
+- Docker
+
 ## Installation
 
-`git clone git@github.com:afoon/aux-todo.git `
+1. Clone reprository
 
-Install packages
+```bash
+git clone git clone git@github.com:afoon/aux-todo.git 
+cd aux-todo
+```
 
-`pnpm install`
+2. Install dependencies
 
-Create env from example
+```bash
+npm install
+```
 
-## Run the app
+3. Add an .env
+There is an `example.env` provided.
 
-`pnpm dev`
+## Run the application locally
+
+1. Start development server
+
+```bash
+npm run dev
+```
+
+2. Visit application at `http://localhost:5371`
