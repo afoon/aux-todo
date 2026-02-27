@@ -20,6 +20,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: { origin: [CLIENT_URL], credentials: true },
 });
+app.set('io', io);
 
 ///////// Middleware //////////////
 app.use(cors({ origin: CLIENT_URL, credentials: true }));

@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 import { IoProvider } from './contexts/SocketContext';
 import { useAuth } from './contexts/index';
 import { AuthProvider } from './contexts/AuthContext';
@@ -25,6 +26,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AppContent />
+        <Toaster position="top-center" />
       </AuthProvider>
     </QueryClientProvider>
   );

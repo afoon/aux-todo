@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import type { Task } from "../types";
 import { z } from "zod";
 import * as tasksApi from "../api/tasks";
+import { useSocket } from "../contexts";
 
 const taskSchema = z.object({
   id: z.string(),
@@ -17,6 +20,7 @@ const TASKS_QUERY_KEY = ["tasks"];
 
 export const useTask = () => {
   const queryClient = useQueryClient();
+  const { socket } = useSocket();
 
   const {
     data: tasks = [],
@@ -26,6 +30,33 @@ export const useTask = () => {
     queryKey: TASKS_QUERY_KEY,
     queryFn: tasksApi.fetchTasks,
   });
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const onTaskCreated = () => {
+      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
+      toast.info("Task created");
+    };
+    const onTaskUpdated = () => {
+      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
+      toast.info("Task updated");
+    };
+    const onTaskDeleted = () => {
+      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY });
+      toast.info("Task deleted");
+    };
+
+    socket.on("task:created", onTaskCreated);
+    socket.on("task:updated", onTaskUpdated);
+    socket.on("task:deleted", onTaskDeleted);
+
+    return () => {
+      socket.off("task:created", onTaskCreated);
+      socket.off("task:updated", onTaskUpdated);
+      socket.off("task:deleted", onTaskDeleted);
+    };
+  }, [socket, queryClient]);
 
   const createMutation = useMutation({
     mutationFn: (payload: tasksApi.CreateTaskPayload) => tasksApi.createTask(payload),

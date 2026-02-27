@@ -48,7 +48,7 @@ export default function Todo() {
   return (
     <>
       <div className="board-container">
-        <h1>Todo</h1>
+        <h1>To-do List</h1>
           <>
             <div className="board-columns">
               {tasksByStatus.map(({ status, label, tasks: columnTasks }) => (
@@ -67,7 +67,7 @@ export default function Todo() {
               ))}
             </div>
             <div className="container">
-              <h2>New task</h2>
+              <h2>Add a new task</h2>
               <TodoNewTaskForm onSubmit={handleAddTask} isCreating={isCreating} />
             </div>
           </>

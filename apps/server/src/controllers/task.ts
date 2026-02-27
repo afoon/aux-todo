@@ -3,10 +3,15 @@ import { PrismaClient, Prisma } from '../../generated/prisma/client.js';
 import dotenv from 'dotenv';
 import type { Request, Response } from 'express';
 import type { Task } from '../../generated/prisma/client.js';
+import type { Server as SocketIoServer } from 'socket.io';
 dotenv.config();
 
 const pool = new PrismaPg({ connectionString: process.env.DB_URL });
 const prisma = new PrismaClient({ adapter: pool });
+
+function getIo(req: Request): SocketIoServer | undefined {
+  return req.app.get('io') as SocketIoServer | undefined;
+}
 
 export const getTasks = async (req: Request, res: Response) => {
     const tasks: Task[] = await prisma.task.findMany();
@@ -24,6 +29,8 @@ export const createTask = async (req: Request, res: Response) => {
         data: { title: title.trim(), description, status: 'todo' },
     });
     res.json(task);
+    const io = getIo(req);
+    if (io) io.emit('task:created', task);
 }
 
 export const updateTask = async (req: Request, res: Response) => {
@@ -37,6 +44,8 @@ export const updateTask = async (req: Request, res: Response) => {
         data: req.body as Prisma.TaskUpdateInput,
     });
     res.json(task);
+    const io = getIo(req);
+    if (io) io.emit('task:updated', task);
 }
 
 export const deleteTask = async (req: Request, res: Response) => {
@@ -47,4 +56,6 @@ export const deleteTask = async (req: Request, res: Response) => {
     }
     const task = await prisma.task.delete({ where: { id } });
     res.json(task);
+    const io = getIo(req);
+    if (io) io.emit('task:deleted', { id: task.id });
 }
