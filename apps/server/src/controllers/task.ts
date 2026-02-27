@@ -14,9 +14,14 @@ export const getTasks = async (req: Request, res: Response) => {
 }
 
 export const createTask = async (req: Request, res: Response) => {
-    const { title, description } = req.body as { title: string; description?: string };
+    const { title, description } = req.body as { title?: string; description?: string };
+    if (!title || typeof title !== 'string' || !title.trim()) {
+        const err = new Error('Title is required') as Error & { statusCode: number };
+        err.statusCode = 400;
+        throw err;
+    }
     const task: Task = await prisma.task.create({
-        data: { title, description, status: 'todo' },
+        data: { title: title.trim(), description, status: 'todo' },
     });
     res.json(task);
 }

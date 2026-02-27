@@ -5,7 +5,8 @@ import { createServer } from 'node:http';
 import dotenv from 'dotenv';
 import { Server } from 'socket.io';
 import type { Request } from 'express';
-import apiRoutes from './routes/api.js'
+import apiRoutes from './routes/api.js';
+import { errorHandler } from './middleware/errorHandler.js';
 dotenv.config();
 
 const PORT = process.env.PORT ?? 3000;
@@ -28,6 +29,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 ///////// routes//////////////
 app.use('/api', apiRoutes);
+
+///////// Error handling //////////////
+app.use(errorHandler);
 
 ///////// Socket.io //////////////
 io.engine.use(sessionMiddleware);
