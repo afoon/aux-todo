@@ -1,30 +1,33 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { IoProvider } from './contexts/SocketContext';
+import { useAuth } from './contexts/index';
+import { AuthProvider } from './contexts/AuthContext';
 
-import './App.css'
-import { useState } from 'react';
-import { IoProvider } from './contexts/SocketContext'
-import { useSocket } from './contexts/index';
+import Todo from './components/Todo';
+import SignIn from './components/SignIn';
+const queryClient = new QueryClient();
 
-function App() {
-  const [value, setValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { socket } = useSocket();
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
+function AppContent() {
+  const { user, loading } = useAuth();
 
-    socket?.timeout(5000).emit('create-something', value, () => {
-      setIsLoading(false);
-    });
-  }
+  if (loading) return <p>Loading...</p>;
+  if (!user) return <SignIn/>;
   return (
-<IoProvider>
-<form onSubmit={ onSubmit }>
-      <input onChange={ e => setValue(e.target.value) } />
-      <button type="submit" disabled={ isLoading }>Submit</button>
-    </form>
-</IoProvider>
-  )
+    <IoProvider>
+      <Todo />
+    </IoProvider>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

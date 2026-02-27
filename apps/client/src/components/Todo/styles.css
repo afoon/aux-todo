@@ -1,0 +1,64 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2rem;
+    gap: 2rem;
+    border: 3px solid var(--color-primary);
+    border-radius: 24px;
+    box-shadow: 2px 3px 0 1px var(--color-primary);
+}
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.board-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.board-column {
+    min-width: 0;
+}
+
+.todo-list-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    gap: 2rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 12px;
+    box-shadow: 1px 2px 0 1px var(--color-primary);
+    background-color: var(--color-bg);
+}
+.todo-list-item.edit {
+    flex-direction: column;
+    gap: 1rem;
+}
+.edit-button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+  .edit-input {
+    color: var(--color-primary);
+    padding: 0.5rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .edit-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }

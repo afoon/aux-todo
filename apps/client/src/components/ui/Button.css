@@ -1,0 +1,19 @@
+.button {
+  background-color: var(--color-bg);
+  min-width: fit-content;
+  border-radius: 24px;
+  border: 2px solid var(--color-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem 1.5rem;
+  font-weight: 600;
+  gap: 10px;
+  transition: background-color 0.2s;
+  box-shadow: 2px 3px 0 1px var(--color-primary);
+}
+
+.button a {
+  color: white;
+  text-decoration: none;
+}
