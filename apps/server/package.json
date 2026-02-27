@@ -1,7 +1,7 @@
 {
-  "name": "@aux-todo/api",
+  "name": "@aux-todo/server",
   "version": "1.0.0",
-  "description": "API for Aux Todo",
+  "description": "Server for Aux Todo",
   "main": "src/index.ts",
   "scripts": {
     "test": "",

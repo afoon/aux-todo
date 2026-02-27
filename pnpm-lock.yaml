@@ -12,7 +12,62 @@ importers:
         specifier: ^4.22.1
         version: 4.22.1
 
-  apps/api:
+  apps/client:
+    dependencies:
+      dotenv:
+        specifier: ^17.3.1
+        version: 17.3.1
+      react:
+        specifier: ^19.2.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.4(react@19.2.4)
+      socket.io-client:
+        specifier: ^4.8.3
+        version: 4.8.3
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.39.1
+        version: 9.39.3
+      '@types/node':
+        specifier: ^24.10.1
+        version: 24.10.13
+      '@types/react':
+        specifier: ^19.2.7
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitejs/plugin-react':
+        specifier: ^5.1.1
+        version: 5.1.4(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(tsx@4.21.0))
+      babel-plugin-react-compiler:
+        specifier: ^1.0.0
+        version: 1.0.0
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.3(jiti@2.6.1)
+      eslint-plugin-react-hooks:
+        specifier: ^7.0.1
+        version: 7.0.1(eslint@9.39.3(jiti@2.6.1))
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.24
+        version: 0.4.26(eslint@9.39.3(jiti@2.6.1))
+      globals:
+        specifier: ^16.5.0
+        version: 16.5.0
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+      typescript-eslint:
+        specifier: ^8.48.0
+        version: 8.56.1(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3)
+      vite:
+        specifier: ^7.3.1
+        version: 7.3.1(@types/node@24.10.13)(jiti@2.6.1)(tsx@4.21.0)
+
+  apps/server:
     dependencies:
       '@prisma/adapter-pg':
         specifier: ^7.4.1
@@ -78,61 +133,6 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
-
-  apps/client:
-    dependencies:
-      dotenv:
-        specifier: ^17.3.1
-        version: 17.3.1
-      react:
-        specifier: ^19.2.0
-        version: 19.2.4
-      react-dom:
-        specifier: ^19.2.0
-        version: 19.2.4(react@19.2.4)
-      socket.io-client:
-        specifier: ^4.8.3
-        version: 4.8.3
-    devDependencies:
-      '@eslint/js':
-        specifier: ^9.39.1
-        version: 9.39.3
-      '@types/node':
-        specifier: ^24.10.1
-        version: 24.10.13
-      '@types/react':
-        specifier: ^19.2.7
-        version: 19.2.14
-      '@types/react-dom':
-        specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.14)
-      '@vitejs/plugin-react':
-        specifier: ^5.1.1
-        version: 5.1.4(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(tsx@4.21.0))
-      babel-plugin-react-compiler:
-        specifier: ^1.0.0
-        version: 1.0.0
-      eslint:
-        specifier: ^9.39.1
-        version: 9.39.3(jiti@2.6.1)
-      eslint-plugin-react-hooks:
-        specifier: ^7.0.1
-        version: 7.0.1(eslint@9.39.3(jiti@2.6.1))
-      eslint-plugin-react-refresh:
-        specifier: ^0.4.24
-        version: 0.4.26(eslint@9.39.3(jiti@2.6.1))
-      globals:
-        specifier: ^16.5.0
-        version: 16.5.0
-      typescript:
-        specifier: ~5.9.3
-        version: 5.9.3
-      typescript-eslint:
-        specifier: ^8.48.0
-        version: 8.56.1(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3)
-      vite:
-        specifier: ^7.3.1
-        version: 7.3.1(@types/node@24.10.13)(jiti@2.6.1)(tsx@4.21.0)
 
 packages:
 
