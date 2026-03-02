@@ -20,7 +20,9 @@ RUN pnpm exec prisma generate
 
 # Copy server source
 COPY apps/server .
+COPY apps/server/docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "pnpm exec prisma migrate deploy && pnpm exec tsx watch src/index.ts"]
+CMD ["./docker-entrypoint.sh"]

@@ -1,5 +1,7 @@
 import { useState} from 'react'
 import { useAuth } from '../../contexts/index';
+import './signup-styles.css';
+
 export default function SignIn() {
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
@@ -20,19 +22,29 @@ export default function SignIn() {
     }
   
     return (
-      <>
-      <form onSubmit={onSubmit}>
+      <div className="signin">
+      <form onSubmit={onSubmit} className="signin form">
+        <div className="signin-header">
+        <h1>Welcome to the Todo App</h1>
+        <h2>Please enter your username to continue</h2>
+        </div>
+        <div className="signin-content">
+<div className="signin-content-input">
+        <label htmlFor="username">Username</label>
         <input
           placeholder="Enter username"
+          className="edit-input"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           disabled={isLoading}
-        />
-        <button type="submit" disabled={isLoading}>
+          />
+          </div>
+        <button type="submit" disabled={isLoading} className=" button">
           {isLoading ? '...' : 'Continue'}
         </button>
-        {error && <p>{error}</p>}
+          </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
-      </>
+      </div>
     );
   }

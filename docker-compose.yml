@@ -6,6 +6,8 @@ services:
       dockerfile: apps/server/Dockerfile
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
@@ -13,6 +15,8 @@ services:
       - DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${DB_PORT}/${POSTGRES_DB}
       - SESSION_SECRET=${SESSION_SECRET}
       - PORT=3000
+    networks:
+      - app
 
   db:
     container_name: aux-todo-db
@@ -20,6 +24,8 @@ services:
     restart: always
     ports:
       - "5432:5432"
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -27,10 +33,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - app
 
   client:
     container_name: aux-todo-client
@@ -47,6 +55,12 @@ services:
     environment:
       - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
       - VITE_SOCKET_URL=${VITE_SOCKET_URL:-http://localhost:3000}
+    networks:
+      - app
 
 volumes:
   postgres_data:
+
+networks:
+  app:
+    name: aux-todo-app
