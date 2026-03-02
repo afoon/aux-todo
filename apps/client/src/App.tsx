@@ -13,10 +13,16 @@ function AppContent() {
   const { user, loading } = useAuth();
 
   if (loading) return <p>Loading...</p>;
-  if (!user) return <SignIn/>;
+  if (!user) return (
+    <main>
+      <SignIn/>
+    </main>
+  );
   return (
     <IoProvider>
+      <main>
       <Todo />
+      </main>
     </IoProvider>
   );
 }

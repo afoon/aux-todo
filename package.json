@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "docker compose up --build",
-    "build": "docker compose build",
+    "dev": "docker compose --env-file .env up --build",
+    "build": "docker compose --env-file .env build",
     "dev:local": "pnpm run --parallel --filter \"./apps/**\" dev",
     "build:local": "pnpm run --recursive --filter \"./apps/**\" build",
     "test": "pnpm run --recursive --filter \"./apps/**\" test",
     "lint": "pnpm run --recursive  --filter \"./apps/**\" lint",
-    "docker:up": "docker compose up",
+    "docker:up": "docker compose --env-file .env up",
     "docker:down": "docker compose down"
   },
   "keywords": [],
